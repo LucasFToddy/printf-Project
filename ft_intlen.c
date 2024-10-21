@@ -1,19 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putchar.c                                       :+:      :+:    :+:   */
+/*   ft_intlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lucas-do <lucas-do@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/17 18:55:27 by lucas-do          #+#    #+#             */
-/*   Updated: 2024/10/17 18:55:29 by lucas-do         ###   ########.fr       */
+/*   Created: 2024/10/21 11:11:51 by lucas-do          #+#    #+#             */
+/*   Updated: 2024/10/21 11:19:12 by lucas-do         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libftprintf.h"
-
-int	ft_putchar(char c)
+int	ft_intlen(int nb)
 {
-	write(1, &c, 1);
-	return (1);
+	int	slots;
+
+	slots = 0;
+	if (nb < 0 || nb == 0)
+	{
+		if (nb == -2147483648)
+			nb--;
+		nb *= -1;
+		slots++;
+	}
+	while (nb > 0)
+	{
+		slots++;
+		nb /= 10;
+	}
+	return (slots);
 }
+

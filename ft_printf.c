@@ -6,39 +6,61 @@
 /*   By: lucas-do <lucas-do@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 18:44:52 by lucas-do          #+#    #+#             */
-/*   Updated: 2024/10/17 19:43:55 by lucas-do         ###   ########.fr       */
+/*   Updated: 2024/10/21 17:15:56 by lucas-do         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libftprintf.h"
 
-int ft_printf(const char *s, ...)
+static	int	ft_check_arg(const char *str, va_list list)
 {
-	va_list	lista;
-	size_t	i;
+	int	len;
 
-	va_start(lista, s);
-	i = 0;
-	while (s[i])
+	len = 0;
+	str++;
+	if (*str == 'c')
+		len += ft_putchar((char)va_arg(list, int));
+	else if (*str == 's')
+		len += ft_putstr(va_arg(list, char *));
+	else if (*str == 'p')
+		len += ft_putnbr_ptr(va_arg(list, void *));
+	else if (*str == 'd' || *str == 'i')
+		len += ft_putnbr_base_len(va_arg(list, int), 10, "0123456789");
+	else if (*str == 'u')
+		len += ft_putnbr_base_len(va_arg(list, unsigned int), 10, "0123456789");
+	else if (*str == 'x')
+		len += ft_putnbr_base_len(va_arg(list, unsigned int), 16, "0123456789abcdef");
+	else if (*str == 'X')
+		len += ft_putnbr_base_len(va_arg(list, unsigned int), 16, "0123456789ABCDEF");
+	else if (*str == '%')
 	{
-		if ((s[i] == 'd' || s[i] == 'i') && s[i + 1] == '%')
-		{
-			ft_putnbr(va_arg(lista, int));
-			i = i + 2;
-		}
-		if (s[i])
-		{
-			ft_putchar(s[i]);
-			i++;
-		}
+		ft_putchar('%');
+		len++;
 	}
-	return (1);
+	return (len);
 }
 
+int	ft_printf(const char *s, ...)
+{
+	va_list	list;
+	int	r;
+
+	va_start(list, s);
+	r = 0;
+	while (s++)
+	{
+		if (*s == '%')
+			r += ft_check_arg(s, list);
+	}
+	va_end(list);
+	return (r);
+}
+#include <stdio.h>
 int	main(void)
 {
 	int	d;
 
-	d = 10;
-	ft_printf("sera que vai d%", d);
+	d = 2;
+	ft_printf("sera que vai %d\n", d);
+	printf("%d\n", d);
 }
