@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "libftprintf.h"
+#include <stdio.h>
 
 static	int	ft_check_arg(const char *str, va_list list)
 {
@@ -25,42 +26,38 @@ static	int	ft_check_arg(const char *str, va_list list)
 	else if (*str == 'p')
 		len += ft_putnbr_ptr(va_arg(list, void *));
 	else if (*str == 'd' || *str == 'i')
-		len += ft_putnbr_base_len(va_arg(list, int), 10, "0123456789");
+		len += ft_putnbr(va_arg(list, int));
 	else if (*str == 'u')
-		len += ft_putnbr_base_len(va_arg(list, unsigned int), 10, "0123456789");
+		len += ft_putnbr_base(va_arg(list, unsigned int), 10, "0123456789");
 	else if (*str == 'x')
-		len += ft_putnbr_base_len(va_arg(list, unsigned int), 16, "0123456789abcdef");
+		len += ft_putnbr_base(
+				va_arg(list, unsigned int), 16, "0123456789abcdef");
 	else if (*str == 'X')
-		len += ft_putnbr_base_len(va_arg(list, unsigned int), 16, "0123456789ABCDEF");
-	else if (*str == '%')
-	{
-		ft_putchar('%');
-		len++;
-	}
+		len += ft_putnbr_base(
+				va_arg(list, unsigned int), 16, "0123456789ABCDEF");
+	else
+		len += ft_putchar(*str);
 	return (len);
 }
 
 int	ft_printf(const char *s, ...)
 {
+	int		r;
 	va_list	list;
-	int	r;
 
 	va_start(list, s);
 	r = 0;
-	while (s++)
+	while (*s)
 	{
 		if (*s == '%')
+		{
 			r += ft_check_arg(s, list);
+			s++;
+		}
+		else
+			r += ft_putchar(*s);
+		s++;
 	}
 	va_end(list);
 	return (r);
-}
-#include <stdio.h>
-int	main(void)
-{
-	int	d;
-
-	d = 2;
-	ft_printf("sera que vai %d\n", d);
-	printf("%d\n", d);
 }

@@ -12,7 +12,27 @@
 
 #include "libftprintf.h"
 
-void	ft_putnbr(int n)
+static int	itoalen(long int nb)
+{
+	long int	slots;
+
+	slots = 0;
+	if (nb < 0 || nb == 0)
+	{
+		if (nb == -2147483648)
+			nb--;
+		nb *= -1;
+		slots++;
+	}
+	while (nb > 0)
+	{
+		slots++;
+		nb = nb / 10;
+	}
+	return (slots);
+}
+
+static void	ft_putnbr_int(int n)
 {
 	if (n == -2147483648)
 	{
@@ -33,4 +53,14 @@ void	ft_putnbr(int n)
 	}
 	else
 		ft_putchar(n + 48);
+}
+
+int	ft_putnbr(int n)
+{
+	int	i;
+
+	i = 0;
+	i = itoalen(n);
+	ft_putnbr_int(n);
+	return (i);
 }

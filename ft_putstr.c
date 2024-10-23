@@ -17,6 +17,10 @@ int	ft_putstr(char *s)
 	int	i;
 
 	i = 0;
+	if (s == NULL)
+	{
+		s = "(null)";
+	}
 	while (s[i])
 	{
 		ft_putchar(s[i]);
@@ -24,4 +28,10 @@ int	ft_putstr(char *s)
 	}
 	return (i);
 }
-
+/*
+#include <stdio.h>
+int	main(void)
+{
+	ft_printf(" %s %s %s %s %s ", " - ", "", "4", "", "2 ");
+}
+*/

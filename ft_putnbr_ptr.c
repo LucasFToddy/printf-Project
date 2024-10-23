@@ -11,27 +11,32 @@
 /* ************************************************************************** */
 
 #include "libftprintf.h"
+#include <stdio.h>
+
+static int	ft_putnbr_wr_ptr(unsigned long n, unsigned long base, char *digit)
+{
+	int	i;
+
+	i = 0;
+	if (n >= base)
+	{
+		i += ft_putnbr_wr_ptr(n / base, base, digit);
+		i += ft_putnbr_wr_ptr(n % base, base, digit);
+	}
+	else
+		i += ft_putchar(digit[n]);
+	return (i);
+}
 
 int	ft_putnbr_ptr(void *n)
 {
 	int	i;
 
 	i = 0;
-	ft_putchar('0');
-	ft_putchar('x');
-	i = ft_putnbr_base_len((unsigned long)n, 16, "0123456789abcde");
+	if (n == NULL)
+		return (ft_putstr("(nil)"));
+	i += ft_putchar('0');
+	i += ft_putchar('x');
+	i += ft_putnbr_wr_ptr((unsigned long)n, 16, "0123456789abcdef");
 	return (i);
 }
-/*
-#include <stdio.h>
-int	main(void)
-{
-	int	a = 50;
-
-	int	*b = &a;
-
-	printf("%p\n", &b);
-	ft_putnbr_ptr((unsigned long)&b);
-	ft_putchar('\n');
-}
-*/
